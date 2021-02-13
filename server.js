@@ -63,27 +63,33 @@ http.listen(3000,function(){
         app.post("/login", function(request, result){
             var username = request.fields.username;
             var password = request.fields.password;
-
             database.collection("users").findOne({"username": username},function(error, user){
                 if(user == null){
-                    database.collection("users").insertOne({
-                        "username": username,
-                        "password":password
-                    },function(error, data){ 
-                        result.json({
-                            "status": "success",
-                            "message": "Sigup successful."
-                        });
-                    });
-                }
-                else{
                     result.json({
-                        "status":"error",
-                        "message": "username already exist"
+						"status": "error",
+						"message": "Email does not exist"
                     });
-                }
-            });
+                } else {
+					bcrypt.compare(password, user.password, function (error, isVerify) {
+						if (isVerify) {
+							var accessToken = jwt.sign({ username: username }, accessTokenSecret);
+							database.collection("users").findOneAndUpdate({
+								"username": username
+							}, function (error, data) {
+								result.json({
+									"status": "success",
+									"message": "Login successfully",	
+								});
+							});
+						} else {
+							result.json({
+								"status": "error",
+								"message": "Password is not correct"
+							});
+						}
+					});
+				}
+			});
         });
-});
-});
-
+    });
+});        

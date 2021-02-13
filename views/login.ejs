@@ -8,7 +8,7 @@
             <div class ="logo">spaceBook</div>
         </nav>
         <div class="login_div">
-            <form action="" onsubmit="login(this);">
+            <form method="POST" onsubmit="login(this);">
             <div>
                 <label for="username">Username: </label>
             <input type="text" name="username" id="uname">
@@ -26,7 +26,6 @@
 
         <script>
             function login(form){
-               // alert("hello");
                 form.login_btn.setAttribute("disabled","disabled");
                 form.login_btn.innerHTML = "<span>Loading ....</span>";
 
@@ -48,6 +47,7 @@
                 };
 
                 ajax.send(new FormData(form));
+			    return false;
             }
         </script>
     </body>
