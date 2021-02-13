@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Social Network</title>
+        <link rel="stylesheet" href="/public/css/main.css">
+    </head>
+    <body>
+        <nav>
+            <div class ="logo">spaceBook</div>
+        </nav>
+        <div class="login_div">
+            <form action="" onsubmit="login(this);">
+            <div>
+                <label for="username">Username: </label>
+            <input type="text" name="username" id="uname">
+            </div>
+            <div>
+                <label for="password">Password: </label>
+            <input type="text" name="password" id="pword">
+            </div>
+
+            <div>
+                <input type="submit" name="login_btn" id="login_btn" value="login">
+            </div>
+            </form>
+        </div>
+
+        <script>
+            function login(form){
+               // alert("hello");
+                form.login_btn.setAttribute("disabled","disabled");
+                form.login_btn.innerHTML = "<span>Loading ....</span>";
+
+                var ajax = new XMLHttpRequest();
+                ajax.open("POST","/login",true);
+
+                ajax.onreadystatechange = function(){
+                    if(this.readyState=4 && this.status ==200){
+                        form.login_btn.removeAttribute("disabled");
+                        form.login_btn.innerHTML="<span>Login</span>";
+
+                        var response = JSON.parse(this.responseText);
+                        alert(response.message);
+
+                        if(response.status == "success"){
+                            window.location.href = "/signup";
+                        }
+                    }
+                };
+
+                ajax.send(new FormData(form));
+            }
+        </script>
+    </body>
+</html>

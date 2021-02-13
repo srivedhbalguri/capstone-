@@ -1,0 +1,21 @@
+body{
+    margin: 0;
+}
+nav{
+    padding: 25px 0;
+    background-color: aquamarine;
+    text-align: center;
+}
+.logo{
+    font-size: 25px;
+    display: inline-block;
+}
+.signup_div{
+    border: 1px solid black;
+    width: 35%;
+    margin: auto;
+}
+.signup_div div{
+    margin: 15px;
+
+}
