@@ -8,7 +8,7 @@
             <div class ="logo">spaceBook</div>
         </nav>
         <div class="signup_div">
-            <form method="post" action="" onsubmit="signUp(this);">
+            <form method="POST" onsubmit="signUp(this);">
             <div>
                 <label for="username">Username: </label>
             <input type="text" name="username" id="uname">
@@ -25,7 +25,6 @@
 
         <script>
             function signUp(form){
-                //alert("hello");
                 form.signup_btn.setAttribute("disabled","disabled");
                 form.signup_btn.innerHTML = "<span>Loading ....</span>";
 

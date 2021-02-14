@@ -12,14 +12,22 @@ var http = require("http").createServer(app);
 var bcrypt = require("bcrypt");
 var fileSystem = require("fs");
 
-
+var jwt = require("jsonwebtoken");
+var accessTokenSecret = "myAccessTokenSecret1234567890";
 
 app.use("/public",express.static(__dirname+"/public"));
 app.set("view engine","ejs");
 
-
+var socketIO = require("socket.io")(http);
+var socketID = "";
+var users = [];
 
 var mainURL = "http://localhost:3000";
+
+socketIO.on("connection", function (socket) {
+	console.log("User connected", socket.id);
+	socketID = socket.id;
+});
 
 http.listen(3000,function(){
     console.log("Server started at port 3000");
@@ -38,13 +46,15 @@ http.listen(3000,function(){
 
             database.collection("users").findOne({"username": username},function(error, user){
                 if(user == null){
-                    database.collection("users").insertOne({
-                        "username": username,
-                        "password":password
-                    },function(error, data){ 
-                        result.json({
-                            "status": "success",
-                            "message": "Sigup successful."
+                    bcrypt.hash(password, 10, function (error, hash) {
+                        database.collection("users").insertOne({
+                            "username": username,
+                            "password":hash
+                        },function(error, data){ 
+                            result.json({
+                                "status": "success",
+                                "message": "Sigup successful."
+                            });
                         });
                     });
                 }
@@ -75,10 +85,15 @@ http.listen(3000,function(){
 							var accessToken = jwt.sign({ username: username }, accessTokenSecret);
 							database.collection("users").findOneAndUpdate({
 								"username": username
+							}, {
+								$set: {
+									"accessToken": accessToken
+								}
 							}, function (error, data) {
 								result.json({
 									"status": "success",
-									"message": "Login successfully",	
+									"message": "Login successfully",
+                                    "accessToken": accessToken	
 								});
 							});
 						} else {
