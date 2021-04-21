@@ -7,51 +7,53 @@
         <nav>
             <div class ="logo">spaceBook</div>
         </nav>
-        <div class="login_div">
-            <form method="POST" onsubmit="return login(this);">
+        <div class="auth_div">
+            <h3>Login</h3>
+            <form method="POST" onsubmit="login(this);">
             <div>
                 <label for="username">Username: </label>
             <input type="text" name="username" id="uname">
             </div>
             <div>
                 <label for="password">Password: </label>
-            <input type="text" name="password" id="pword">
+            <input type="password" name="password" id="pword">
             </div>
-
             <div>
                 <input type="submit" name="login_btn" id="login_btn" value="login">
+                <input type="button" name="signup_btn" id="signup_btn" value="Signup">
             </div>
             </form>
         </div>
-
         <script>
             function login(form){
-                form.login_btn.setAttribute("disabled","disabled");
-                form.login_btn.innerHTML = "<span>Loading ....</span>";
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST","/login",true);
 
-                var ajax = new XMLHttpRequest();
-                ajax.open("POST","/login",true);
-
-                ajax.onreadystatechange = function(){
-                    if(this.readyState=4 && this.status ==200){
-                        form.login_btn.removeAttribute("disabled");
-                        form.login_btn.innerHTML="<span>Login</span>";
-
+                xhr.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
                         var response = JSON.parse(this.responseText);
 
                         if(response.status == "success"){
                             var accessToken = response.accessToken;
                             localStorage.setItem("accessToken", accessToken);
-                            window.location.href = "/profile";
-                        } else {
-						    alert(response.message);
-                        }    
-                    }
-                };
+                            alert(response.message);
+                            window.location.href = "profile";
+                        }
+                        else{
+                            window.location.href = "login";
+                            alert(response.message);
+                        }
 
-                ajax.send(new FormData(form));
-			    return false;
+                    }
+                }
+
+                xhr.send(new FormData(form));
+                
+
             }
+            document.getElementById("signup_btn").addEventListener("click",function(){
+                window.location.href = "/signup";
+            });
         </script>
     </body>
 </html>
