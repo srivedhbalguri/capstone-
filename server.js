@@ -1,5 +1,6 @@
 var express = require("express");
 var app= express();
+const PORT = process.env.PORT || 3000;
 
 var formidable = require("express-formidable");
 app.use(formidable());
@@ -32,7 +33,7 @@ var mainURL = "http://localhost:3000";
 // });
 var upload = multer({dest:''});
 
-http.listen(3000,function(){
+http.listen(PORT,function(){
     console.log("Server started at port 3000");
 
     mongoClient.connect("mongodb+srv://user1:Qwerty123@cluster0.ws1pj.mongodb.net/foodDb?retryWrites=true&w=majority",function(error,client){
