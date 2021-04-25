@@ -10,7 +10,7 @@ var mongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectID;
 
 var http = require("http").createServer(app);
-var bcrypt = require("bcrypt");
+// var bcrypt = require("bcrypt");
 var fileSystem = require("fs");
 
 var jwt = require("jsonwebtoken");
